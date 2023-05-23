@@ -1,3 +1,5 @@
+package my_t;
+
 /**
  * 滚动哈希法
  * 对目标字符串按d进制求值，mod h 取余作为其hash
