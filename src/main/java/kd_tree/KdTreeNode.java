@@ -1,7 +1,9 @@
 package kd_tree;
 
 
-public class KdTreeNode {
+import java.io.Serializable;
+
+public class KdTreeNode implements Serializable {
 
     private Integer id;
 
