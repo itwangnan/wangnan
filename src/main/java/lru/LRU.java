@@ -18,7 +18,6 @@ public class LRU {
         this.capacity = capacity;
     }
 
-    //如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1
     public int get(int key){
 
         Node<Integer> node = map.get(key);
@@ -27,10 +26,9 @@ public class LRU {
             return -1;
         }
 
-        return node.t;
+        return node.value;
     }
 
-    // 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。
     public void put(int key, int value){
         Node<Integer> lastNode = this.lastNode;
         Node<Integer> firstNode = this.firstNode;
@@ -44,70 +42,82 @@ public class LRU {
 
         //已经存在就直接修改值
         Node<Integer> updateAfterNode = map.get(key);
-        if (map.get(key) != null){
-            updateAfterNode.t = value;
-            //放到最后一位
+        if (updateAfterNode != null){
+            updateAfterNode.value = value;
             //之后节点
             Node<Integer> afterNode = updateAfterNode.afterNode;
             //之前节点
             Node<Integer> beforeNode = updateAfterNode.beforeNode;
 
-            beforeNode.afterNode = afterNode;
+            if (beforeNode != null){
+                beforeNode.afterNode = afterNode;
+            }
+            if (afterNode != null){
+                afterNode.beforeNode = beforeNode;
+            }
+            //证明 尾节点要替换
+            if (updateAfterNode == lastNode){
+                this.lastNode = beforeNode;
+            }
 
+            updateAfterNode.beforeNode = null;
+            updateAfterNode.afterNode = firstNode;
+            this.firstNode = updateAfterNode;
 
-            this.lastNode = updateAfterNode;
-            lastNode.afterNode = updateAfterNode;
+            firstNode.beforeNode = updateAfterNode;
+
 
             return;
         }
 
 
 
-        Node<Integer> node = new Node<>(value,null,null);
+        Node<Integer> node = new Node<>(key,value,null,null);
 
         if (firstNode == null && lastNode == null){
             this.firstNode = node;
             this.lastNode = node;
-
         }else {
             //不是第一次
-            node.afterNode = firstNode.beforeNode == null ? firstNode : firstNode.beforeNode;
+            node.afterNode = firstNode;
             node.beforeNode = null;
 
             this.firstNode = node;
-
-            firstNode.afterNode = node;
+            firstNode.beforeNode = node;
         }
 
-        if (this.map.size() == capacity){
+        if (this.map.size() >= capacity){
 
-            map.remove(lastNode.t);
+            map.remove(lastNode.key);
             map.put(key,node);
 
 
             this.lastNode = lastNode.beforeNode;
+            if (lastNode.beforeNode != null){
+                lastNode.beforeNode.afterNode = null;
+            }
 
             lastNode.beforeNode = null;
+
+        }else {
+            this.map.putIfAbsent(key, node);
         }
-
-
-
-
-        this.map.putIfAbsent(key, node);
-
     }
 
 
     class Node<T>{
 
-        T t;
+        T key;
+
+        T value;
 
         Node<T> afterNode;
 
         Node<T> beforeNode;
 
-        public Node(T t, Node<T> afterNode, Node<T> beforeNode) {
-            this.t = t;
+        public Node(T key,T value, Node<T> afterNode, Node<T> beforeNode) {
+            this.key = key;
+            this.value = value;
             this.afterNode = afterNode;
             this.beforeNode = beforeNode;
         }
