@@ -1,13 +1,11 @@
 package sundries;
 
-import my_t.Complex;
-import my_t.FFT;
-import my_t.NTT;
+import fft.Complex;
+import fft.FFT;
 
 public class Two {
 
     public static void main(String[] args) {
-
         test_fft();
     }
 

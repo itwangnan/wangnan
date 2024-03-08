@@ -1,10 +1,4 @@
-package my_t;
-
-import my_t.Complex;
-
-import java.awt.*;
-import java.math.BigInteger;
-import java.util.Random;
+package fft;
 
 public class IFFT {
     // compute the FFT of x[], assuming its length is a power of 2

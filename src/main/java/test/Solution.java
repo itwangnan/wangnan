@@ -1,4 +1,4 @@
-package my_t;
+package test;
 
 public class Solution {
 

@@ -38,4 +38,7 @@ public class GiniRes {
     public Function<Loan, Integer> getFieldFun() {
         return fieldFun;
     }
+
+
 }
+

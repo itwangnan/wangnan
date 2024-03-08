@@ -1,4 +1,4 @@
-package my_t;
+package str;
 
 import java.util.Arrays;
 

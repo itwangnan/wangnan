@@ -1,4 +1,4 @@
-package my_t;
+package zip;
 
 import java.util.Random;
 

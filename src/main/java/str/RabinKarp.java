@@ -1,4 +1,4 @@
-package my_t;
+package str;
 
 /**
  * 滚动哈希法

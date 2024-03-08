@@ -1,4 +1,4 @@
-package my_t;
+package str;
 
 public class RK_Str {
 
