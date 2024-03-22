@@ -1,56 +1,109 @@
 package test;
 
+import org.apache.lucene.util.RamUsageEstimator;
 import str.ac.DoubleArrayTrie;
+import str.ac.MyTripleArrayTrie;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.function.Consumer;
+
+import static str.ac.AcTest.readFile;
 
 public class Tcc {
 
-    private static String PATTERN = "\\s*[0-9]+";
+    public static void main(String[] args) throws Exception {
+//        myTest();
 
-    public static void main(String[] args) {
+        TreeSet<String> set = new TreeSet<>();
 
-//        TreeSet<String> treeSet = new TreeSet<>();
-//        treeSet.add("入门");
-//        treeSet.add("自然");
-//        treeSet.add("自然语言");
-//        treeSet.add("自语");
-//        treeSet.add("自然人");
+
+
+
+        set.add("原神大眼表情包KT8");
+        set.add("原神搞怪Q版HS1");
+        set.add("原神搞怪Q版HS10");
+
+        set.add("原神派蒙七七HS1");
+//        set.add("原神派蒙七七HS10");
+//        set.add("原神派蒙七七HS11");
+//        set.add("原神派蒙七七HS12");
+//        set.add("原神派蒙七七HS13");
+//        set.add("原神派蒙七七HS14");
+//        set.add("原神派蒙七七HS15");
+//        set.add("原神派蒙七七HS16");
+//        set.add("原神派蒙七七HS17");
+//        set.add("原神派蒙七七HS18");
+//        set.add("原神派蒙七七HS19");
+//        set.add("原神派蒙七七HS2");
+//        set.add("原神派蒙七七HS20");
+//        set.add("原神派蒙七七HS21");
+//        set.add("原神派蒙七七HS22");
+//        set.add("原神派蒙七七HS23");
+//        set.add("原神派蒙七七HS24");
+//        set.add("原神派蒙七七HS25");
+//        set.add("原神派蒙七七HS26");
+//        set.add("原神派蒙七七HS27");
+//        set.add("原神派蒙七七HS28");
+//        set.add("原神派蒙七七HS29");
+//        set.add("原神派蒙七七HS3");
+
+
+
+        MyTripleArrayTrie trie = new MyTripleArrayTrie(set);
+
+        System.out.println(trie.search("原神派蒙七七HS10"));
+    }
+
+    private static void hanlpTest() throws Exception {
 //
-//        for (String s : treeSet) {
-//            System.out.println(s);
-//        }
-//
-//        System.out.println(Character.hashCode('然'));
-//        System.out.println(Character.hashCode('语'));
-//        TripleArrayTrie trie2 = new TripleArrayTrie(treeSet);
-//        System.out.println(trie2.getItem("jar"));
 
-//        int maxValue = Character.MAX_VALUE;
-//        System.out.println(maxValue);
+
         TreeMap<String,String> map = new TreeMap<>();
-        map.put("入门","入门");
-        map.put("自然","自然");
-        map.put("自然语言","自然语言");
-        map.put("自语","自语");
-        map.put("自然人","自然人");
 
+        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> map.put(x,x));
+        long start = System.currentTimeMillis();
         DoubleArrayTrie<String> trie = new DoubleArrayTrie<>(map);
+        long end = System.currentTimeMillis();
+        System.err.println(end - start);
 
-//        System.out.println(trie.exactMatchSearch(""));
-//        treeSet.add("入门");
-//        treeSet.add("自然");
-//        treeSet.add("自然语言");
-//        treeSet.add("自语");
-//        treeSet.add("自然人");
 
-////        TripleArrayTrie trie3 = new TripleArrayTrie(treeSet);
-//        TripleArrayTrie2 trie2 = new TripleArrayTrie2(treeSet);
+        map.forEach((x,y) -> {
+            System.out.println(trie.containsKey(x));
+        });
+        //查看占用内存大小
+        System.out.println(RamUsageEstimator.humanSizeOf(map));
+        System.out.println(RamUsageEstimator.humanSizeOf(trie));
+    }
+
+    private static void myTest() throws Exception {
 //
-//
-//////
-//        System.out.println(trie2.search("自然"));
+        TreeSet<String> map = new TreeSet<>();
 
+        long start = System.currentTimeMillis();
+        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> map.add(x));
+        long end = System.currentTimeMillis();
+        System.err.println(end - start);
+
+        MyTripleArrayTrie trie = new MyTripleArrayTrie(map);
+
+        int count = 0;
+        for (String x : map) {
+            if (!trie.search(x)){
+                System.out.println("set.add(\""+x+"\");");
+                count++;
+            }
+        }
+
+        System.out.println(count);
+
+        //查看占用内存大小
+//        System.out.println(RamUsageEstimator.humanSizeOf(map));
+//        System.out.println(RamUsageEstimator.humanSizeOf(trie));
     }
 
 }

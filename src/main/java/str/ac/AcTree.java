@@ -12,7 +12,7 @@ public class AcTree {
     private AcNode root;
 
     public AcTree() {
-        this.root = new AcNode(' ',1);
+        this.root = new AcNode("");
     }
 
 
@@ -25,57 +25,45 @@ public class AcTree {
     }
 
 
+    //字典树增加
     public void add(String pattern) {
         AcNode node = root;
-        int level = 1;
+
         StringBuilder sb = new StringBuilder();
         for (char c : pattern.toCharArray()) {
-            level++;
+
             sb.append(c);
-            Map<Character, AcNode> map = node.getMap();
-            if (map != null && map.get(c) == null) {
-                AcNode children = new AcNode(c,level);
-//                children.setLevel(level);
-//                children.setPattern(sb.toString());
+            Map<Character, AcNode> map = node.map;
+
+            if (map.get(c) == null) {
+                AcNode children = new AcNode();
                 map.put(c,children);
             }
+
             node = map.get(c);
         }
-        node.setEnd(true);
+
+        node.isEnd = true;
+        node.value = sb.toString();
     }
-
-
-//    public void build() {
-//        for (int i = 0; i < 26; i++)
-//            if (tr[0][i]) q.push(tr[0][i]);
-//        while (q.size()) {
-//            int u = q.front();
-//            q.pop();
-//            for (int i = 0; i < 26; i++) {
-//                if (tr[u][i])
-//                    fail[tr[u][i]] = tr[fail[u]][i], q.push(tr[u][i]);
-//                else
-//                    tr[u][i] = tr[fail[u]][i];
-//            }
-//        }
-//    }
 
     // 构建失败指针
     public void buildFailurePointer() {
         AcNode root = this.root;
         Queue<AcNode> queue = new LinkedList<>();
 
-        root.getMap().forEach((x,y) -> {
+        root.map.forEach((x,y) -> {
             if (y != null) {
                 queue.offer(y);
-                y.setFail(root);
+                y.fail = root;
             }
         });
 
-
+        //层次遍历
         while (!queue.isEmpty()) {
+
             AcNode current = queue.poll();
-            Map<Character, AcNode> map = current.getMap();
+            Map<Character, AcNode> map = current.map;
             if (MapUtils.isEmpty(map)){
                 continue;
             }
@@ -85,56 +73,98 @@ public class AcTree {
 
                 queue.offer(y);
 
-                AcNode failPointer = current.getFail();
-                Map<Character, AcNode> failPointerMap = failPointer.getMap();
+                AcNode failPointer = current.fail;
 
+                Map<Character, AcNode> failPointerMap = failPointer.map;
 
                 while (failPointer != null && failPointerMap != null && failPointerMap.get(x) == null) {
-                    failPointer = failPointer.getFail();
+                    failPointer = failPointer.fail;
                 }
-                y.setFail(failPointer != null ? failPointerMap.get(x) : this.root);
 
+                if (failPointer == null || failPointerMap == null){
+                    y.fail = this.root;
+
+                }else {
+                    y.fail = failPointerMap.get(x);
+                }
 
             });
 
         }
     }
 
-    public void match(String text) {
+    //匹配
+    public List<String> match(String text) {
         AcNode current = root;
-        StringBuilder sb = new StringBuilder();
+        List<String> res = new ArrayList<>();
+
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-
-            while (current != null && current.getMap().get(c) == null) {
-                current = current.getFail();
-            }
-
-            if (current == null) {
+            if (current == null){
                 current = root;
-                continue;
-            }
-            current = current.getMap().get(c);
-            sb.append(current.getValue());
-
-            // 匹配到模式串
-            if (current.isEnd()) {
-                int level = current.getLevel();
-                String s = sb.toString();
-//                System.out.println("Found pattern: " + s.substring(s.length() - level + 1));
             }
 
-//            // 打印匹配的所有模式串
-//            AcNode temp = current;
-//            while (temp != root) {
-//                if (temp.isEnd()) {
-//                    sb.append(current.getValue());
-//                    System.out.println("Found pattern: " + sb.toString());
-//                    sb = new StringBuilder();
-//                }
-//                temp = temp.getFail();
-//            }
+            while (current != root && current.map.get(c) == null) {
+                current = current.fail;
+            }
+
+            current = current.map.get(c);
+
+
+            // 打印匹配的所有模式串
+            if (current != null && current.isEnd) {
+                AcNode temp = current;
+                while (temp != null && temp != root) {
+                    if (temp.isEnd) {
+                        String s = temp.value;
+                        res.add(s);
+                    }
+                    temp = temp.fail;
+                }
+            }
+
         }
+
+        return res;
+    }
+
+
+    public class AcNode {
+
+        /**
+         * 是否结束
+         */
+        boolean isEnd;
+
+
+        /**
+         * 失效指针
+         */
+        AcNode fail;
+
+        /**
+         * 截止节点保存数据
+         */
+        String value;
+
+        /**
+         * 后续节点
+         */
+        Map<Character, AcNode> map;
+
+        public AcNode(String value) {
+            this.value = value;
+            this.isEnd = true;
+            this.map = new HashMap<>();
+        }
+
+        public AcNode() {
+            this.isEnd = false;
+            this.map = new HashMap<>();
+        }
+
+
+
     }
 
 
