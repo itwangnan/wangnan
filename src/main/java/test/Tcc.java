@@ -17,51 +17,16 @@ import static str.ac.AcTest.readFile;
 public class Tcc {
 
     public static void main(String[] args) throws Exception {
-//        myTest();
 
-        TreeSet<String> set = new TreeSet<>();
+        myTest();
 
-
-
-
-        set.add("原神大眼表情包KT8");
-        set.add("原神搞怪Q版HS1");
-        set.add("原神搞怪Q版HS10");
-
-        set.add("原神派蒙七七HS1");
-//        set.add("原神派蒙七七HS10");
-//        set.add("原神派蒙七七HS11");
-//        set.add("原神派蒙七七HS12");
-//        set.add("原神派蒙七七HS13");
-//        set.add("原神派蒙七七HS14");
-//        set.add("原神派蒙七七HS15");
-//        set.add("原神派蒙七七HS16");
-//        set.add("原神派蒙七七HS17");
-//        set.add("原神派蒙七七HS18");
-//        set.add("原神派蒙七七HS19");
-//        set.add("原神派蒙七七HS2");
-//        set.add("原神派蒙七七HS20");
-//        set.add("原神派蒙七七HS21");
-//        set.add("原神派蒙七七HS22");
-//        set.add("原神派蒙七七HS23");
-//        set.add("原神派蒙七七HS24");
-//        set.add("原神派蒙七七HS25");
-//        set.add("原神派蒙七七HS26");
-//        set.add("原神派蒙七七HS27");
-//        set.add("原神派蒙七七HS28");
-//        set.add("原神派蒙七七HS29");
-//        set.add("原神派蒙七七HS3");
-
-
-
-        MyTripleArrayTrie trie = new MyTripleArrayTrie(set);
-
-        System.out.println(trie.search("原神派蒙七七HS10"));
+//        TreeSet<String> set = new TreeSet<>();
+//        set.add("原神芙宁娜贰JR1");
+//        MyTripleArrayTrie trie = new MyTripleArrayTrie(set);
+//        System.out.println(trie.search("原神芙宁娜贰JR1"));
     }
 
     private static void hanlpTest() throws Exception {
-//
-
 
         TreeMap<String,String> map = new TreeMap<>();
 
@@ -91,6 +56,8 @@ public class Tcc {
 
         MyTripleArrayTrie trie = new MyTripleArrayTrie(map);
 
+//        System.out.println(trie.search("龙年龙宝宝线条KDX1"));
+
         int count = 0;
         for (String x : map) {
             if (!trie.search(x)){
@@ -103,7 +70,7 @@ public class Tcc {
 
         //查看占用内存大小
 //        System.out.println(RamUsageEstimator.humanSizeOf(map));
-//        System.out.println(RamUsageEstimator.humanSizeOf(trie));
+        System.out.println(RamUsageEstimator.humanSizeOf(trie));
     }
 
 }

@@ -4,7 +4,6 @@ import java.util.*;
 
 /**
  * 三数组字典树
- *
  * check[base[s] + c] = s
  * next[base[s] + c] = t
  * 结尾next[base[s] + c] = -1
@@ -18,8 +17,9 @@ public class MyTripleArrayTrie {
     //目前数组大小
     private int allocSize;
 
-    //最大有值的长度
-    private int size;
+    //最大有值的下标,这里记录的是next和check数组中有值的最大索引，
+    // 其实base数组可以用另一字段维护
+    private int maxIndex;
 
     private int nextBasePos;
 
@@ -31,51 +31,22 @@ public class MyTripleArrayTrie {
     //32 * 65536 内存对齐
     private static final int RSIZE =  HASH_SIZE * 32;
 
+    private boolean degBug = false;
+
 
     public MyTripleArrayTrie(TreeSet<String> treeSet) {
+//        resize(16);
         resize(RSIZE);
 
         this.base[0] = 1;
 
         treeSet.forEach(this::add);
 
-//        shrink();
+        shrink();
     }
 
     // 查询字符串的方法
     public boolean search(String word) {
-        int s = 0;
-
-        for (int i = 0; i < word.length(); i++) {
-            //base[s] + c
-            int index = base[s] + (int) word.charAt(i) + 1;
-
-            if (check[index] != s) {
-                // 不存在该字符串
-                return false;
-            }
-
-            //next[base[s] + c] = t
-            s = next[index];
-        }
-
-
-        int p = base[s] + 1;
-
-        //base[next[base[s] + 0]] = t
-        int n = next[p]; //查询base
-
-        //check[base[s] + 0] = base[s]
-        if (s == check[p] && n < 0){ //状态转移成功且对应词语结尾
-//            int index = -n - 1; //获得字典序
-            return true;
-        }
-        // 检查是否到达字符串末尾
-        return false;
-    }
-
-    // 查询字符串的方法
-    public boolean search2(String word) {
         int s = 0;
 
         for (int i = 0; i < word.length(); i++) {
@@ -111,20 +82,14 @@ public class MyTripleArrayTrie {
         if (word == null || word.trim().length() == 0){
             return;
         }
-        String flag = word;
-        System.out.println(word);
+
         int s = 0;
         word += "\0";
         int preIndex = 0;
-//        if (flag.equals("原神派蒙七七HS3")){
-//            System.out.println();
-//        }
-
 
         for (int i = 0; i < word.length(); i++) {
             int c = word.charAt(i);
 
-//            int b = this.getB(Arrays.asList(c));
             //t  = base[s] + c
             if (base[s] == 0){
                 //找begin
@@ -134,19 +99,16 @@ public class MyTripleArrayTrie {
 
             int index = base[s] + c + 1;
 
-
-            if (index > size){
-                size = index;
+            if (allocSize <= index){
+                resize(index + 1);
             }
 
-//            System.out.println(check[40108]);
 
             if (check[index] == -1) {
                 int t = nextBasePos++;
                 //next[base[s] + c] == 0 ,不冲突
                 //check[base[s] + c] = s
                 check[index] = s;
-
 //                base[t] = b;
 
                 if (preIndex != 0){
@@ -158,29 +120,20 @@ public class MyTripleArrayTrie {
                 preIndex = index;
 
                 s = nextBasePos;
-
             }
             //next[base[s] + c] != 0 ,冲突
             else if (check[index] != s){
-                if (flag.equals("原神派蒙七七HS3")){
-                    System.out.println(check[40108]);
-                    System.out.println(check[40106]);
-                    System.out.println(this.search2("原神派蒙七七HS10"));
-                }
-//                if (flag.equals("原神派蒙七七HS4") ){
-//                    System.out.println(check[40108]);
-//                    System.out.println(this.search2("原神派蒙七七HS10"));
-//                }
+
 
                 //s 和 check[index] 争取 c字符
                 this.conflict(s, check[index], c);
+
                 //分配完在执行
                 int t = nextBasePos++;
 
                 index = base[s] + c + 1;
-                if (index > size){
-                    size = index;
-                }
+
+
                 //check[base[s] + c] = s
                 check[index] = s;
 
@@ -193,13 +146,7 @@ public class MyTripleArrayTrie {
                 }
 
                 preIndex = index;
-                if (flag.equals("原神派蒙七七HS3")){
-                    System.out.println(check[40108]);
-                    System.out.println(this.search2("原神派蒙七七HS10"));
-                }
-//                if (flag.equals("原神派蒙七七HS4") && !this.search2("原神派蒙七七HS10")){
-//                    System.out.println("");
-//                }
+
                 s = nextBasePos;
             }
             //next[base[s] + c] == 0 ,共同前缀
@@ -210,29 +157,49 @@ public class MyTripleArrayTrie {
             }
 
 
+            if (index > maxIndex){
+                maxIndex = index;
+            }
+
         }
 
         next[preIndex] = -1;
+
+//        if (flag.equals("原神芙宁娜贰JR1")){
+//            degBug = true;
+//        }
+//        if (degBug && !this.search2("原神芙宁娜贰JR1")){
+//            System.out.println(flag);
+//        }
     }
 
-    private int conflict(int s, int p,int c) {
+    private void conflict(int s, int p,int c) {
         //证明需要重新
         //父节点的子节点字符
         List<Integer> parCList = this.getC(p);
         //当节点的子节点
         List<Integer> curCList = this.getC(s);
-        List<Integer> smallList = parCList.size() >= curCList.size() ? curCList : parCList;
-        int smallS = parCList.size() >= curCList.size() ? s : p;
-//            List<Integer> smallList = parCList;
-//            int smallS = s;
+
+        List<Integer> smallList;
+        int smallS;
         //先要找 begin
-//        List<Integer> integers = new ArrayList<>(smallList);
-//        integers.add(c);
-        int b = this.getB(smallList);
+        int b;
+        if (parCList.size() >= curCList.size()){
+            smallList = curCList;
+            smallS = s;
+
+            smallList.add(c);
+            b = this.getB(smallList);
+            smallList.remove(smallList.size()-1);
+        }else {
+            smallList = parCList;
+            smallS = p;
+
+            b = this.getB(smallList);
+        }
+
         //重新分配
         relocate(smallS,b,smallList);
-
-        return smallS;
     }
 
 
@@ -247,11 +214,14 @@ public class MyTripleArrayTrie {
 
         int begin = 1;
 
-
         outer:
         // 此循环体的目标是找出满足check[begin + a1...an]  == 0的n个空闲空间,a1...an是siblings中的n个节点
         while (true) {
             pos++;
+
+            if (allocSize <= pos){
+                resize(pos + 1);
+            }
 
             //check[pos] 是第一个下标的选取，如果直接有值，直接重找
             if (check[pos] != -1) {
@@ -263,8 +233,8 @@ public class MyTripleArrayTrie {
             begin = pos - siblings.get(0); // 当前位置离第一个兄弟节点的距离
 
             //距离加上最后一个节点 （最长距离）大于等于目前 数组大小，进行扩容65535
-            if (allocSize <= (begin + siblings.get(siblings.size() - 1))) {
-                resize(begin + siblings.get(siblings.size() - 1) + Character.MAX_VALUE);
+            if (allocSize <= (begin + siblings.get(siblings.size() - 1) + 1)) {
+                resize(begin + siblings.get(siblings.size() - 1) + 1 + Character.MAX_VALUE);
             }
 
             //满足check[begin + a1...an]  == 0
@@ -274,12 +244,9 @@ public class MyTripleArrayTrie {
                 }
             }
 
-            if (begin + siblings.get(0) + 1 > size){
-                size = begin + siblings.get(0) + 1;
-            }
-
             break;
         }
+
 
         nextCheckPos = pos;
 
@@ -314,6 +281,11 @@ public class MyTripleArrayTrie {
 //            next[base[s] + c + 1] = 0;
         }
 
+        //  重新分配后如果最大的索引大于maxIndex
+        if (b + siblings.get(siblings.size() - 1) + 1 > maxIndex){
+            maxIndex = b + siblings.get(siblings.size() - 1) + 1;
+        }
+
         base[s] = b;
     }
 
@@ -321,7 +293,7 @@ public class MyTripleArrayTrie {
     private List<Integer> getC(int s){
         List<Integer> list = new ArrayList<>();
         int bs = base[s];
-        for (int i = bs - 1; i <= size; i++) {
+        for (int i = bs - 1; i <= maxIndex; i++) {
             if (check[i] != s){
                 continue;
             }
@@ -330,7 +302,6 @@ public class MyTripleArrayTrie {
         }
         return list;
     }
-
 
 
 
@@ -343,8 +314,7 @@ public class MyTripleArrayTrie {
         int[] newNext = new int[size];
         int[] newCheck = new int[size];
 
-//        Arrays.fill(newBase, -1);
-//        Arrays.fill(newNext, -1);
+
         Arrays.fill(newCheck, -1);
 
         if (allocSize > 0) {
@@ -361,21 +331,24 @@ public class MyTripleArrayTrie {
         allocSize = size;
     }
 
-    //    /**
-//     * 释放空闲的内存
-//     */
+
+    /**
+     * 释放空闲的内存
+     */
     private void shrink() {
-        int[] nbase = new int[size + 65535];
-        System.arraycopy(base, 0, nbase, 0, size+2);
+        int len = maxIndex + 1;
+
+        int[] nbase = new int[maxIndex + 65535];
+        System.arraycopy(base, 0, nbase, 0, len);
         base = nbase;
 
-        int[] ncheck = new int[size + 65535];
-        System.arraycopy(check, 0, ncheck, 0, size+2);
+        int[] ncheck = new int[maxIndex + 65535];
+        System.arraycopy(check, 0, ncheck, 0, len);
         check = ncheck;
 
 
-        int[] nNext = new int[size + 65535];
-        System.arraycopy(next, 0, nNext, 0, size+2);
+        int[] nNext = new int[maxIndex + 65535];
+        System.arraycopy(next, 0, nNext, 0, len);
         next = nNext;
     }
 
