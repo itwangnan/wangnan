@@ -40,7 +40,7 @@ public class KMP_Str {
         if (t.length() < p.length() || p.length() < 1){
             return false;
         }
-//        List<String> list = new ArrayList<>();
+
         //首先创建p前缀表
         int m = t.length();
         int n = p.length();
@@ -71,29 +71,11 @@ public class KMP_Str {
         if (t.length() < p.length() || p.length() < 1){
             return false;
         }
-//        List<String> list = new ArrayList<>();
+
         //首先创建p前缀表
         int[] next = computePrefixFunction(p.toCharArray());
 
-        int m = t.length();
-        int n = p.length();
-
-        for(int i=0, j=0; i < m; i++){
-
-            while(j>0 && t.charAt(i) != p.charAt(j)){
-                j = next[j-1];
-            }
-
-            if(t.charAt(i) == p.charAt(j)){
-                j++;
-            }
-
-            if(j == n){
-                return true;
-//                System.out.println(i);
-//                j = next[j-1];
-            }
-        }
+        kmp(t,p,next);
 
         return false;
     }

@@ -1,6 +1,7 @@
 package test;
 
 import org.apache.lucene.util.RamUsageEstimator;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -23,29 +24,30 @@ import static str.ac.AcTest.readFile;
 @State(Scope.Thread) // 每个测试线程分配一个实例
 public class KmpAcTest {
 
-    /**
-     * 10 * 5 + 4 * 10 = 90w 的商品标题
-     * 11.5w                 的图号
-     */
-    @Benchmark
-    public void acTest() throws Exception {
-        AcTree acAutomaton = new AcTree();
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> acAutomaton.add(x));
-        acAutomaton.buildFailurePointer();
+//    /**
+//     * 10 * 5 + 4 * 10 = 90w 的商品标题
+//     * 11.5w                 的图号
+//     */
+//    @Benchmark
+//    public void acTest() throws Exception {
+//        AcTree acAutomaton = new AcTree();
+//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> acAutomaton.add(x));
+//        acAutomaton.buildFailurePointer();
+//
+//
+//        for (int i = 3; i <= 16 ; i++) {
+//            String fileName = String.format("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t%s.csv", i);
+//            readFile(fileName, x -> {
+//                String text = x.split(",")[1];
+//                List<String> match = acAutomaton.match(text);
+////                System.out.println(text+" Found pattern:  " + match);
+//            });
+//        }
+////        System.out.println(RamUsageEstimator.humanSizeOf(acAutomaton));
+//    }
 
-
-        for (int i = 3; i <= 16 ; i++) {
-            String fileName = String.format("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t%s.csv", i);
-            readFile(fileName, x -> {
-                String text = x.split(",")[1];
-                List<String> match = acAutomaton.match(text);
-//                System.out.println(text+" Found pattern:  " + match);
-            });
-        }
-//        System.out.println(RamUsageEstimator.humanSizeOf(acAutomaton));
-    }
-
-    @Benchmark
+//    @Benchmark
+    @Test
     public void acDoubleTest() throws Exception {
         TreeMap<String, String> map = new TreeMap<>();
 

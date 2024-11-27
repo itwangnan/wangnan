@@ -607,7 +607,7 @@ public class AcDoubleArrayTrie<V> {
         private void buildDoubleArrayTrie(Set<String> keySet) {
             progress = 0;
             keySize = keySet.size();
-            resize(65536 * 32); // 32个双字节
+            resize(65536); // 32个双字节
 
             base[0] = 1;
             nextCheckPos = 0;
@@ -679,8 +679,8 @@ public class AcDoubleArrayTrie<V> {
                 begin = pos - siblings.get(0).getKey(); // 当前位置离第一个兄弟节点的距离
                 if (allocSize <= (begin + siblings.get(siblings.size() - 1).getKey())) {
                     // progress can be zero // 防止progress产生除零错误
-                    double l = (1.05 > 1.0 * keySize / (progress + 1)) ? 1.05 : 1.0 * keySize / (progress + 1);
-                    resize((int) (allocSize * l));
+//                    double l = (1.05 > 1.0 * keySize / (progress + 1)) ? 1.05 : 1.0 * keySize / (progress + 1);
+                    resize((int) (allocSize * 2));
                 }
 
                 if (used[begin])

@@ -2,28 +2,71 @@ package test;
 
 import org.apache.lucene.util.RamUsageEstimator;
 import str.ac.DoubleArrayTrie;
+import str.ac.MyDoubleArrayTrie;
 import str.ac.MyTripleArrayTrie;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static str.ac.AcTest.readFile;
 
 public class Tcc {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InterruptedException {
 
-        myTest();
+//        List<String> list = new ArrayList<>();
+//        list.add("asd");
+//        list.add("asd");
+//        list.add("asd");
+//        exec(list);
+//        list = new ArrayList<>();
+//        System.out.println(list);
+//        Thread.sleep(20000l);
+        boolean b = BigDecimal.ONE.compareTo(null) > 0;
+        System.out.println(b);
+    }
 
-//        TreeSet<String> set = new TreeSet<>();
-//        set.add("原神芙宁娜贰JR1");
-//        MyTripleArrayTrie trie = new MyTripleArrayTrie(set);
-//        System.out.println(trie.search("原神芙宁娜贰JR1"));
+    private static void exec(List<String> list) {
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(2000l);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < list.size(); i++) {
+                System.out.println(list.get(i));
+            }
+        });
+        thread.start();
+
+    }
+
+    private static void myDoubleTest() throws Exception {
+
+        TreeSet<String> set = new TreeSet<>();
+
+        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> set.add(x));
+        long start = System.currentTimeMillis();
+        MyDoubleArrayTrie trie = new MyDoubleArrayTrie(set);
+        long end = System.currentTimeMillis();
+        System.err.println(end - start);
+
+        set.forEach(x -> {
+            if (trie.search(x)){
+                System.out.println("set.add(\""+x+"\");");
+            }
+
+        });
+        //查看占用内存大小
+//        System.out.println(RamUsageEstimator.humanSizeOf(map));
+        System.out.println(RamUsageEstimator.sizeOf(trie));
     }
 
     private static void hanlpTest() throws Exception {
@@ -38,11 +81,13 @@ public class Tcc {
 
 
         map.forEach((x,y) -> {
-            System.out.println(trie.containsKey(x));
+            if (trie.exactMatchSearch(x) < 0){
+                System.out.println("set.add(\""+x+"\");");
+            }
         });
         //查看占用内存大小
-        System.out.println(RamUsageEstimator.humanSizeOf(map));
-        System.out.println(RamUsageEstimator.humanSizeOf(trie));
+//        System.out.println(RamUsageEstimator.humanSizeOf(map));
+        System.out.println(RamUsageEstimator.sizeOf(trie));
     }
 
     private static void myTest() throws Exception {

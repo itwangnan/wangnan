@@ -24,8 +24,9 @@ import java.util.*;
 /**
  * 双数组Trie树
  * 理论是check[base[s] + c] = s 但是这里是check[base[s] + c] = base[s] ,存的直接base值而非索引（可以简介减少一次访问）
- * base[s] + c = t
- * base[t] = begin
+ *
+ * check[base[s] + c] = base[s]
+ * base[s] + c = base[t] or 结束是key的下标
  */
 public class DoubleArrayTrie<V> implements Serializable {
     private final static int BUF_SIZE = 16384;
@@ -161,7 +162,7 @@ public class DoubleArrayTrie<V> implements Serializable {
         // siblings.get(0).code + 1
         //enableFastBuild 开启了快速构建则nextCheckPos + 1 否则nextCheckPos
         //最后在-1
-        int pos = Math.max(siblings.get(0).code + 1, enableFastBuild ? (nextCheckPos + 1) : nextCheckPos) - 1;
+        int pos = Math.max(siblings.get(0).code + 1, nextCheckPos) - 1;
         int nonzero_num = 0;
         int first = 0;
 
@@ -180,7 +181,8 @@ public class DoubleArrayTrie<V> implements Serializable {
             if (check[pos] != 0) {
                 nonzero_num++;
                 continue;
-            } else if (first == 0) {
+            }
+            else if (first == 0) {
                 //第一次记录pos 位置
                 nextCheckPos = pos;
                 first = 1;
@@ -240,6 +242,8 @@ public class DoubleArrayTrie<V> implements Serializable {
             // 一个词的终止且不为其他词的前缀
             if (fetch(siblings.get(i), new_siblings) == 0) {
                 //base[base[s] + c] = t , -siblings.get(i).left - 1 。如果有value[]那就
+
+                //结束存的是匹配串的下标
                 base[begin + siblings.get(i).code] =
                         (value != null) ? (-value[siblings.get(i).left] - 1) : (-siblings.get(i).left - 1);
 
@@ -255,6 +259,7 @@ public class DoubleArrayTrie<V> implements Serializable {
                 //节点的子节点，h为子节点第一个点的开始
                 int h = insert(new_siblings, used);   // dfs
                 //base[base[s] + c] = t 下个节点的基准点位置
+                //非结束存的是check(next)的偏移量
                 base[begin + siblings.get(i).code] = h;
             }
         }
@@ -262,6 +267,11 @@ public class DoubleArrayTrie<V> implements Serializable {
         //第一个点的开始
         return begin;
     }
+
+
+
+
+
 
     public DoubleArrayTrie() {
         check = null;
@@ -458,7 +468,7 @@ public class DoubleArrayTrie<V> implements Serializable {
         p = b;
         int n = base[p];
         if (b == check[p] && n < 0) {
-            result = -n - 1;
+            result = - n - 1;
         }
         return result;
     }
@@ -489,7 +499,7 @@ public class DoubleArrayTrie<V> implements Serializable {
         p = b;
         int n = base[p];
         if (b == check[p] && n < 0) {
-            result = -n - 1;
+            result = - n - 1;
         }
         return result;
     }
