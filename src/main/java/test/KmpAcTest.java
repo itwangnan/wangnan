@@ -31,12 +31,12 @@ public class KmpAcTest {
 //    @Benchmark
 //    public void acTest() throws Exception {
 //        AcTree acAutomaton = new AcTree();
-//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> acAutomaton.add(x));
+//        readFile("/图号2.csv", x -> acAutomaton.add(x));
 //        acAutomaton.buildFailurePointer();
 //
 //
 //        for (int i = 3; i <= 16 ; i++) {
-//            String fileName = String.format("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t%s.csv", i);
+//            String fileName = String.format("/t%s.csv", i);
 //            readFile(fileName, x -> {
 //                String text = x.split(",")[1];
 //                List<String> match = acAutomaton.match(text);
@@ -51,7 +51,7 @@ public class KmpAcTest {
     public void acDoubleTest() throws Exception {
         TreeMap<String, String> map = new TreeMap<>();
 
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv",x -> {
+        readFile("/图号2.csv",x -> {
             map.put(x,x);
         });
 //        long start = System.currentTimeMillis();
@@ -63,7 +63,7 @@ public class KmpAcTest {
 
 //        long start2 = System.currentTimeMillis();
         for (int i = 3; i <= 16 ; i++) {
-            String fileName = String.format("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t%s.csv", i);
+            String fileName = String.format("/t%s.csv", i);
             readFile(fileName,x -> trie.parseText(x.split(",")[1],
                     (a,b,c) -> {
 //                    System.out.println(c);
@@ -79,8 +79,8 @@ public class KmpAcTest {
 //        List<String> patternList = new ArrayList<>();
 //        List<String> textList = new ArrayList<>();
 //
-//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", patternList::add);
-//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t11.csv",x -> textList.add(x.split(",")[1]));
+//        readFile("/图号2.csv", patternList::add);
+//        readFile("/t11.csv",x -> textList.add(x.split(",")[1]));
 //
 //        for (String p : patternList) {
 //            int[] next = KMP_Str.computePrefixFunction(p.toCharArray());

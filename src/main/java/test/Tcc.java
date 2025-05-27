@@ -19,40 +19,11 @@ import static str.ac.AcTest.readFile;
 
 public class Tcc {
 
-    public static void main(String[] args) throws InterruptedException {
-
-//        List<String> list = new ArrayList<>();
-//        list.add("asd");
-//        list.add("asd");
-//        list.add("asd");
-//        exec(list);
-//        list = new ArrayList<>();
-//        System.out.println(list);
-//        Thread.sleep(20000l);
-        boolean b = BigDecimal.ONE.compareTo(null) > 0;
-        System.out.println(b);
-    }
-
-    private static void exec(List<String> list) {
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(2000l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            for (int i = 0; i < list.size(); i++) {
-                System.out.println(list.get(i));
-            }
-        });
-        thread.start();
-
-    }
-
     private static void myDoubleTest() throws Exception {
 
         TreeSet<String> set = new TreeSet<>();
 
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> set.add(x));
+        readFile("/图号2.csv", x -> set.add(x));
         long start = System.currentTimeMillis();
         MyDoubleArrayTrie trie = new MyDoubleArrayTrie(set);
         long end = System.currentTimeMillis();
@@ -73,7 +44,7 @@ public class Tcc {
 
         TreeMap<String,String> map = new TreeMap<>();
 
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> map.put(x,x));
+        readFile("/图号2.csv", x -> map.put(x,x));
         long start = System.currentTimeMillis();
         DoubleArrayTrie<String> trie = new DoubleArrayTrie<>(map);
         long end = System.currentTimeMillis();
@@ -95,7 +66,7 @@ public class Tcc {
         TreeSet<String> map = new TreeSet<>();
 
         long start = System.currentTimeMillis();
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", x -> map.add(x));
+        readFile("/图号2.csv", x -> map.add(x));
         long end = System.currentTimeMillis();
         System.err.println(end - start);
 

@@ -14,8 +14,8 @@ public class KMP_Str {
         List<String> patternList = new ArrayList<>();
         List<String> textList = new ArrayList<>();
 
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv", patternList::add);
-        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t3.csv",x -> textList.add(x.split(",")[1]));
+        readFile("/图号2.csv", patternList::add);
+        readFile("/t3.csv",x -> textList.add(x.split(",")[1]));
         long start = System.currentTimeMillis();
 
         int i = 0;

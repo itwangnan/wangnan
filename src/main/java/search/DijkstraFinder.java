@@ -13,6 +13,11 @@ import java.util.Map;
  */
 public class DijkstraFinder extends AStarFinder {
 
+    /**
+     * 1 -> 2
+     * 1.5 -> 1.7
+     * @param opt
+     */
     public DijkstraFinder(Map<String, Object> opt) {
         super(opt);
         heuristic = (dx,dy) -> 0;

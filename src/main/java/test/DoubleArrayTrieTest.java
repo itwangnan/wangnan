@@ -13,7 +13,7 @@ public class DoubleArrayTrieTest {
     public static void main(String[] args) throws Exception {
 
 //        TreeMap<String, String> map = new TreeMap<>();
-//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/图号2.csv",x -> {
+//        readFile("/图号2.csv",x -> {
 //            map.put(x,x);
 //        });
 //        long start = System.currentTimeMillis();
@@ -24,7 +24,7 @@ public class DoubleArrayTrieTest {
 //
 //
 //        long start2 = System.currentTimeMillis();
-//        readFile("/Users/wangnan/IdeaProjects/wangnan/src/main/resources/t11.csv",x -> trie.parseText(x.split(",")[1],
+//        readFile("/t11.csv",x -> trie.parseText(x.split(",")[1],
 //                (a,b,c) -> {
 //                    System.out.println(c);
 //        }));
