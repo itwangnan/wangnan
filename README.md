@@ -2,7 +2,7 @@
 
   <!-- dynamic typing effect 动态打字效果 -->
 
-  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=console.log(%22Hello%2C%20World%22);王同学祝您今天愉快!&center=true&size=27)](https://git.io/typing-svg)
+  [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&width=435&lines=console.log(%22Hello%2C%20World%22);王楠祝您今天愉快!&center=true&size=27)](https://git.io/typing-svg)
 
 
   <!-- knock code pictures 敲代码的图片 -->
@@ -18,7 +18,14 @@
 
 Overview
 ------
-该项目会不定时提交本人在学习中的一些算法，后续增加LPA*和D*Lite算法
+该项目会不定时提交本人在学习中的一些算法和测试 \
+
+算法分为数据结构类和数学相关类算法 \
+测试目前有jvm内存屏障测试 \
+如果发现问题和疑问 可以发送邮件1752328938@qq.com\
+
+后续准备增加LPA\*和D\*Lite算法
+
 
 Directory Structure
 ------
