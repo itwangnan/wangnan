@@ -21,7 +21,7 @@ import java.util.Set;
  *
  * 你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。
  */
-public class Tc {
+public class LeetCode34 {
 
 
     public static void main(String[] args) {
