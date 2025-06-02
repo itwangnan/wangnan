@@ -1,7 +1,9 @@
-package jdktest;
+package jvmtest;
 
 import org.openjdk.jcstress.annotations.*;
 import org.openjdk.jcstress.infra.results.II_Result;
+
+//import java.lang.invoke.VarHandle;
 
 @JCStressTest
 @State
@@ -9,10 +11,10 @@ import org.openjdk.jcstress.infra.results.II_Result;
 @Outcome(id = "0, 1",expect = Expect.ACCEPTABLE, desc = "normal")
 @Outcome(id = "1, 0",expect = Expect.ACCEPTABLE, desc = "normal")
 @Outcome(id = "0, 0",expect = Expect.ACCEPTABLE_INTERESTING, desc = "illegal")
-public class TestVolatile {
+public class TestVolatile_Volatile {
 
-    int x;
-    int y;
+    volatile int x;
+    volatile int y;
 
 
     @Actor

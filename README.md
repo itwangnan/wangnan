@@ -38,7 +38,7 @@ https://github.com/itwangnan/wangnan/tree/master/src/main/java
         ├── cf           算法竞赛题目https://codeforces.com/
         ├── decisiontree CART决策树
         ├── fft          快速傅立叶变换
-        ├── jdktest      jdk内存屏障测试
+        ├── jvmtest      jvm测试
         ├── josephus     约瑟夫问题
         ├── kdtree       kd树
         ├── leetcode     算法题目https://leetcode.cn/

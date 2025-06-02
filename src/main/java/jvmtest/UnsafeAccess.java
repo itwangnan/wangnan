@@ -1,4 +1,4 @@
-package jdktest;
+package jvmtest;
 
 import sun.misc.Unsafe;
 

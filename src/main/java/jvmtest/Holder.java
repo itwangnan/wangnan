@@ -1,4 +1,4 @@
-package jdktest;
+package jvmtest;
 
 public class Holder {
 

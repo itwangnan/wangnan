@@ -1,12 +1,14 @@
-package jdktest;
+package jvmtest;
 
 import org.openjdk.jcstress.annotations.*;
 import org.openjdk.jcstress.infra.results.II_Result;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+//import java.lang.invoke.VarHandle;
 
 /**
- * 测试相干性,plain
- * 骗过 Java 编译器造成这种乱序
+ * Opaque禁止 Java 编译器优化，但是没有涉及任何的内存屏障。
  */
 @JCStressTest
 @State
@@ -14,12 +16,22 @@ import org.openjdk.jcstress.infra.results.II_Result;
 @Outcome(id = "0, 1",expect = Expect.ACCEPTABLE, desc = "ordered")
 @Outcome(id = "1, 0",expect = Expect.ACCEPTABLE_INTERESTING, desc = "reordered")
 @Outcome(id = "0, 0",expect = Expect.ACCEPTABLE, desc = "ordered")
-public class TestCoherence_2 {
+public class TestCoherenceSuccess_2 {
 
 
     private final Holder h1 = new Holder();
     private final Holder h2 = h1;
 
+    static final VarHandle VALUE;
+
+    static {
+        try {
+            MethodHandles.Lookup l = MethodHandles.lookup();
+            VALUE = l.findVarHandle(Holder.class,"a",int.class);
+        } catch (ReflectiveOperationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     @Actor
     public void actor1(){
@@ -27,7 +39,6 @@ public class TestCoherence_2 {
     }
 
 
-    //C2编译器优化导致
     @Actor
     public void actor2(II_Result result){
 
@@ -39,8 +50,8 @@ public class TestCoherence_2 {
         h2.trap = 1;
 
 
-        result.r1 = h1.a;
-        result.r2 = h2.a;
+        result.r1 = (int)VALUE.getOpaque(h1);
+        result.r2 = (int)VALUE.getOpaque(h2);
     }
 
 }

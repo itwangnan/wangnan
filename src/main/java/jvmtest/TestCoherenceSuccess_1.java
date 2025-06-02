@@ -1,4 +1,4 @@
-package jdktest;
+package jvmtest;
 
 
 import org.openjdk.jcstress.annotations.*;
