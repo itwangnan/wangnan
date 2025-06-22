@@ -8,8 +8,6 @@ public class Arr {
 
 
     public static void main(String[] args) {
-
-
         exec(Arrays.asList(1,2,3,5,4));
         exec(Arrays.asList(1,2,3,5,4,1,2,3,4,1,2,3));
         exec(Arrays.asList(1,2,3,5,4));
